@@ -1,0 +1,29 @@
+name: 2022_icassp_fastbsseval
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pytorch>=1.9.0
+  - cudatoolkit=10.2
+  - torchvision
+  - torchaudio
+  - tensorboard
+  - numpy
+  - scipy>=1.5.0
+  - matplotlib
+  - seaborn
+  - pandas
+  - ipython
+  - pytest
+  - ffmpeg
+  - sox
+  - pip
+  - pip:
+      - pytorch-lightning>=1.0.0
+      - pyroomacoustics
+      - PyYAML
+      - ci_sdr
+      - git+https://github.com/fakufaku/mir_eval.git@efficient_permutation
+      - git+https://github.com/fakufaku/bsseval.git@efficient_permutation
+      - git+https://github.com/fgnt/padertorch
