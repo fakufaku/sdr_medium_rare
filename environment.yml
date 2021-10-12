@@ -1,16 +1,16 @@
-name: 2022_icassp_fastbsseval
+name: 2022_sdr_medium_rare
 channels:
   - pytorch
   - conda-forge
 dependencies:
   - python=3.9
-  - pytorch>=1.9.0
+  - pytorch=1.9.1
   - cudatoolkit=10.2
-  - torchvision
-  - torchaudio
-  - tensorboard
-  - numpy
+  - torchvision=0.10.1
+  - torchaudio=0.9.0
+  - numpy=1.21.2
   - scipy>=1.5.0
+  - tensorboard
   - matplotlib
   - seaborn
   - pandas
@@ -20,10 +20,10 @@ dependencies:
   - sox
   - pip
   - pip:
-      - pytorch-lightning>=1.0.0
-      - pyroomacoustics
       - PyYAML
-      - ci_sdr
-      - git+https://github.com/fakufaku/mir_eval.git@efficient_permutation
-      - git+https://github.com/fakufaku/bsseval.git@efficient_permutation
-      - git+https://github.com/fgnt/padertorch
+      - pytorch-lightning=1.4.9
+      - ci-sdr=0.0.0
+      - git+https://github.com/fakufaku/mir_eval.git@ba72134cb76a1b1ba2a792be6184ae94c0b660ee
+      - git+https://github.com/fakufaku/bsseval.git@2742331e1c570429f131c154291e6a5f287eb77f
+      - git+https://github.com/fgnt/padertorch@67cbb1203dfa2d119860d70d26490997aa71fef3
+      - fast-bss-eval=0.0.1

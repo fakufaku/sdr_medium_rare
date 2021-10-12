@@ -1,13 +1,13 @@
-SDR &emdash; Medium Rare with Fast Computations
+SDR &mdash; Medium Rare with Fast Computations
 ===============================================
 
 This repository contains the code to reproduce some of the experiments of
-in the paper [SDR &emdash; Medium Rare with Fast Computation](arxiv_link).
+in the paper [SDR &mdash; Medium Rare with Fast Computation](https://arxiv.org/abs/2110.06440).
 This is essentially a benchmark of the
 [fast\_bss\_eval](https://github.com/fakufaku/fast_bss_eval) Python package for
 the evaluation of blind source separation algorithms.
 
-**Abstract** &emdash; We revisit the widely used bss eval metrics for source
+**Abstract** &mdash; We revisit the widely used bss eval metrics for source
 separation with an eye out for performance. We propose a fast algorithm fixing
 shortcomings of publicly available implementations. First, we show that the
 metrics are fully specified by the squared cosine of just two angles between
@@ -29,12 +29,36 @@ Author
 Quick Start
 -----------
 
+### Get the Code
+
+```bash
+git clone https://github.com/fakufaku/sdr_medium_rare.git
+```
+
+### Install Dataset
+
+We use the [wsj1_2345_db](https://github.com/fakufaku/create_wsj1_2345_db) dataset for the experiments.
+To create the dataset, follow the instructions given in the dataset repository and use the `config_dataset_wsj1_2345_db.json` file.
+
+```bash
+git clone https://github.com/fakufaku/create_wsj1_2345_db.git
+cd create_wsj1_2345_db
+python ./make_dataset.py <some_path>/sdr_medium_rare/config_dataset_wsj1_2345_db.json <path_to_original_datasets> <path_to_output>
+```
+Then, create a symbolic link in the `sdr_medium_rare` folder.
+```bash
+cd <some_path>/sdr_medium_rare
+ln -s <path_to_output>/wsj1_2345_db wsj1_2345_db
+```
+
+### Run Experiments
+
 Assuming use of [anaconda](https://www.anaconda.com/products/individual)
 
 ```
-git clone <repo>
-cd <repo>
+cd <some_path>/sdr_medium_rare
 conda env create -f environment.yml
+conda activate 2022_sdr_medium_rare
 ./run_experiments.sh
 ```
 
@@ -47,11 +71,12 @@ We compare to [mir\_eval](https://github.com/craffel/mir_eval) and [sigsep](http
 
 ### Speed
 
-<img src="./figures/channels_vs_runtime.pdf">
+<img src="./figures/channels_vs_runtime.png">
 
 ### Numerical Accuracy vs mir\_eval
 
-<img src="./figures/metric_vs_error.pdf">
+<img src="./figures/metric_vs_error.png">
+
 
 License
 -------

@@ -18,31 +18,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import json
-from pathlib import Path
-from typing import Union, List, Dict
-import yaml
+from typing import Dict, Optional
 
-def read_config(filename: Union[str, Path]) -> Union[List, Dict]:
-    filename = Path(filename)
-    with open(filename, "r") as f:
-        if filename.suffix == ".json":
-            config = json.load(f)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.load(f, Loader=yaml.FullLoader)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
+from torch import nn
 
-    return config
 
-def write_config(content: Union[Dict, List], filename: Union[str, Path]):
+def module_from_config(name: str, kwargs: Optional[Dict] = None, **other):
+    """
+    Get a model by its name
 
-    filename = Path(filename)
-    with open(filename, "w") as f:
-        if filename.suffix == ".json":
-            config = json.dump(content, f, indent=4)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.dump(content, f)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
+    Parameters
+    ----------
+    name: str
+        Name of the model class
+    kwargs: dict
+        A dict containing all the arguments to the model
+    """
 
+    if kwargs is None:
+        kwargs = {}
+
+    parts = name.split(".")
+    obj = None
+
+    if len(parts) == 1:
+        raise ValueError("Can't find object without module name")
+
+    else:
+        module = __import__(".".join(parts[:-1]), fromlist=(parts[-1],))
+        if hasattr(module, parts[-1]):
+            obj = getattr(module, parts[-1])
+
+    if obj is not None:
+        return obj(**kwargs)
+    else:
+        raise ValueError(f"The model {name} could not be found")

@@ -18,31 +18,48 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import json
-from pathlib import Path
-from typing import Union, List, Dict
-import yaml
+from typing import Union
 
-def read_config(filename: Union[str, Path]) -> Union[List, Dict]:
-    filename = Path(filename)
-    with open(filename, "r") as f:
-        if filename.suffix == ".json":
-            config = json.load(f)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.load(f, Loader=yaml.FullLoader)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
+import torch as pt
 
-    return config
 
-def write_config(content: Union[Dict, List], filename: Union[str, Path]):
+def is_complex_type(t: Union[pt.dtype, pt.Tensor]) -> bool:
 
-    filename = Path(filename)
-    with open(filename, "w") as f:
-        if filename.suffix == ".json":
-            config = json.dump(content, f, indent=4)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.dump(content, f)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
+    if isinstance(t, pt.Tensor):
+        t = t.dtype
 
+    return t in [pt.complex64, pt.complex128]
+
+
+def dtype_f2cpx(t: Union[pt.dtype, pt.Tensor]) -> pt.dtype:
+
+    if isinstance(t, pt.Tensor):
+        t = t.dtype
+
+    _d = {
+        pt.float32: pt.complex64,
+        pt.float64: pt.complex128,
+        pt.complex64: pt.complex64,
+        pt.complex128: pt.complex128,
+    }
+
+    assert t in _d.keys()
+
+    return _d[t]
+
+
+def dtype_cpx2f(t: Union[pt.dtype, pt.Tensor]) -> pt.dtype:
+
+    if isinstance(t, pt.Tensor):
+        t = t.dtype
+
+    _d = {
+        pt.complex64: pt.float32,
+        pt.complex128: pt.float64,
+        pt.float32: pt.float32,
+        pt.float64: pt.float64,
+    }
+
+    assert t in _d.keys()
+
+    return _d[t]

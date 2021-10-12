@@ -18,31 +18,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import json
-from pathlib import Path
-from typing import Union, List, Dict
-import yaml
+from . import linalg, nn, utils
+from .auxiva_iss import auxiva_iss, spatial_model_update_ip2, spatial_model_update_iss
+from .base import SourceModelBase, Window, window_types
+from .models import GaussModel, LaplaceModel, NMFModel
+from .nn import SepAlgo
+from .overiva import auxiva_ip, overiva
+from .scaling import minimum_distortion, minimum_distortion_l2_phase, projection_back
+from .stft import STFT
 
-def read_config(filename: Union[str, Path]) -> Union[List, Dict]:
-    filename = Path(filename)
-    with open(filename, "r") as f:
-        if filename.suffix == ".json":
-            config = json.load(f)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.load(f, Loader=yaml.FullLoader)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
-
-    return config
-
-def write_config(content: Union[Dict, List], filename: Union[str, Path]):
-
-    filename = Path(filename)
-    with open(filename, "w") as f:
-        if filename.suffix == ".json":
-            config = json.dump(content, f, indent=4)
-        elif filename.suffix == ".yml" or filename.suffix == ".yaml":
-            config = yaml.dump(content, f)
-        else:
-            raise ValueError(f"Config filetype {filename.suffix} not supported")
-
+algos = {
+    "auxiva-iss": auxiva_iss,
+    "overiva": overiva,
+    "auxiva-ip": auxiva_ip,
+}
